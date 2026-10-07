@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expense Tracker</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Expense Tracker</h1>
+
+        <p>Track your daily expenses easily.</p>
+
+        <div class="dashboard">
+
+            <div class="card">
+                <h3>Total Expenses</h3>
+                <p>₹{{ total_expense }}</p>
+            </div>
+
+            <div class="card">
+                <h3>Today's Expenses</h3>
+                <p>₹{{ today_expense }}</p>
+            </div>
+
+            <div class="card">
+                <h3>This Month</h3>
+                <p>₹{{ monthly_expense }}</p>
+            </div>
+
+        </div>
+
+        <h2>Category Summary</h2>
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for category in category_expenses %}
+
+                <tr>
+                    <td>{{ category[0] }}</td>
+                    <td>₹{{ category[1] }}</td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        <h2>Expense Distribution</h2>
+
+        <div class="chart-container">
+            <canvas id="expenseChart"></canvas>
+        </div>
+
+
+        
+
+        <a href="/add">
+            <button>Add Expense</button>
+        </a>
+
+
+        <h2>Expense History</h2>
+
+        {% if expenses %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for expense in expenses %}
+
+                <tr>
+                    <td>₹{{ expense[1] }}</td>
+                    <td>{{ expense[2] }}</td>
+                    <td>{{ expense[3] }}</td>
+                    <td>{{ expense[4] }}</td>
+
+                    <td>
+                        <a href="/edit/{{ expense[0] }}">Edit</a>
+
+                        <a href="/delete/{{ expense[0] }}"
+                        onclick="return confirm('Are you sure you want to delete this expense?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <p>No expenses added yet.</p>
+
+        {% endif %}
+
+    </div>
+
+    <script>
+
+        const categories = [
+            {% for category in category_expenses %}
+                "{{ category[0] }}",
+            {% endfor %}
+        ];
+
+        const amounts = [
+            {% for category in category_expenses %}
+                {{ category[1] }},
+            {% endfor %}
+        ];
+
+
+        const ctx = document.getElementById("expenseChart");
+
+
+        new Chart(ctx, {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: categories,
+
+                datasets: [{
+                    label: "Expenses",
+                    data: amounts
+                }]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                plugins: {
+                    legend: {
+                        position: "bottom"
+                    }
+                }
+
+            }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

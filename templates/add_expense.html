@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Add Expense</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Add Expense</h1>
+
+        <form action="/add" method="POST">
+
+            <label>Amount</label>
+            <input type="number" name="amount" step="0.01" required>
+
+
+            <label>Category</label>
+            <select name="category" required>
+                <option value="">Select Category</option>
+                <option value="Food">Food</option>
+                <option value="Travel">Travel</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Bills">Bills</option>
+                <option value="Other">Other</option>
+            </select>
+
+
+            <label>Description</label>
+            <input type="text" name="description">
+
+
+            <label>Date</label>
+            <input type="date" name="date" required>
+
+
+            <button type="submit">Add Expense</button>
+
+        </form>
+
+        <br>
+
+        <a href="/">Back to Home</a>
+
+    </div>
+
+</body>
+</html> 
